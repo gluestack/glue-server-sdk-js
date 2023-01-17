@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "glue server sdk for gluestack apps",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "tsc --watch"
   },

@@ -35,81 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 exports.Auth = void 0;
-var axios_1 = __importDefault(require("axios"));
-var IAuthProviderEnum_1 = __importDefault(require("./interfaces/IAuthProviderEnum"));
+var HttpMethod_1 = require("../functions/interfaces/HttpMethod");
 var Auth = (function () {
-    function Auth(AUTH_BASE_URL) {
-        this.authBaseUrl = "";
+    function Auth(glue) {
         this.authToken = "";
-        this.authBaseUrl = AUTH_BASE_URL;
+        this.glue = glue;
     }
-    Auth.prototype.loginWithEmailPassword = function (email, password) {
-        return __awaiter(this, void 0, void 0, function () {
-            var data, e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, axios_1["default"].post("".concat(this.authBaseUrl, "/authentication/signin"), {
-                                email: email,
-                                password: password
-                            })];
-                    case 1:
-                        data = (_a.sent()).data;
-                        this.setAuthToken(data.data.token);
-                        return [2, data.data];
-                    case 2:
-                        e_1 = _a.sent();
-                        return [3, 3];
-                    case 3: return [2];
-                }
-            });
-        });
-    };
-    Auth.prototype.socialLogin = function (provider) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                window.onmessage = function (event) {
-                    if (event.data) {
-                        _this.setAuthToken(event.data);
-                    }
-                };
-                window.open("".concat(this.authBaseUrl, "/authentication/signin/").concat(provider), "_blank", "location=yes,height=570,width=520,scrollbars=yes,status=yes");
-                return [2, ""];
-            });
-        });
-    };
-    Auth.prototype.login = function (authObject) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!authObject.provider) return [3, 3];
-                        _a = authObject.provider;
-                        switch (_a) {
-                            case IAuthProviderEnum_1["default"].google: return [3, 1];
-                            case IAuthProviderEnum_1["default"].github: return [3, 1];
-                            case IAuthProviderEnum_1["default"].microsoft: return [3, 1];
-                        }
-                        return [3, 3];
-                    case 1: return [4, this.socialLogin(authObject.provider)];
-                    case 2: return [2, _b.sent()];
-                    case 3:
-                        if (!(authObject.email && authObject.password)) return [3, 5];
-                        return [4, this.loginWithEmailPassword(authObject.email, authObject.password)];
-                    case 4: return [2, _b.sent()];
-                    case 5: return [2];
-                }
-            });
-        });
-    };
     Auth.prototype.setAuthToken = function (token) {
         this.authToken = token;
         return this.authToken;
@@ -119,7 +52,7 @@ var Auth = (function () {
     };
     Auth.prototype.getUser = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var data, e_2;
+            var data, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -127,17 +60,15 @@ var Auth = (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4, axios_1["default"].post("".concat(this.authBaseUrl, "/authentication/me"), {}, {
-                                headers: {
-                                    "x-hasura-user-token": this.authToken
-                                }
-                            })];
+                        return [4, this.glue.functions.invoke("auth", "authentication/me", {}, {
+                                "x-hasura-user-token": this.authToken
+                            }, HttpMethod_1.HttpMethod.GET)];
                     case 2:
-                        data = (_a.sent()).data;
-                        this.setAuthToken(data.data.token);
-                        return [2, data.data];
+                        data = _a.sent();
+                        this.setAuthToken(data.token);
+                        return [2, data.token];
                     case 3:
-                        e_2 = _a.sent();
+                        e_1 = _a.sent();
                         return [3, 4];
                     case 4: return [2, null];
                 }

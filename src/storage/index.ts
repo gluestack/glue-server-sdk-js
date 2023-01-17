@@ -1,44 +1,42 @@
 import axios from "axios";
+import { Glue } from "..";
 var FormData = require("form-data");
 import { IStorage } from "./interfaces/IStorage";
+import { HttpMethod } from "../functions/interfaces/HttpMethod";
 
 export class Storage implements IStorage {
-  storageBaseUrl: string = "";
+  glue: Glue;
+  instanceName: string = "storage";
 
-  constructor() {
-    this.storageBaseUrl = process.env.STORAGE_BASE_URL || "http://localhost:9090/backend/storage";
+  constructor(glue: Glue) {
+    this.glue = glue;
   }
 
   //@upload
   async upload(file: any) {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const { data } = await axios.post(
-        `${this.storageBaseUrl}/upload`,
-        formData,
-        {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
+    const formData = new FormData();
+    formData.append("file", file);
+    const { data } = await axios.post(
+      `${this.glue.appBaseUrl}/backend/${this.instanceName}/upload/`,
+      formData,
+      {
+        headers: {
+          "content-type": "multipart/form-data",
         },
-      );
-      return data;
-    } catch (e) {
-      //
-    }
+      },
+    );
+    return data;
   }
 
   //@upload
-  async getPresignedUrl(path: string): Promise<string> {
-    try {
-      const { data } = await axios.get(
-        `${this.storageBaseUrl}/${path}`,
-        {}
-      );
-      return data;
-    } catch (e) {
-      //
-    }
+  async getPresignedUrl(id: number): Promise<string> {
+    const { url }: any = await this.glue.functions.invoke(
+      this.instanceName,
+      `get/${id}`,
+      {},
+      {},
+      HttpMethod.GET,
+    );
+    return url;
   }
 }

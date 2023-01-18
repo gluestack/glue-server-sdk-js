@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -58,107 +69,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncValues = (this && this.__asyncValues) || function (o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-};
 exports.__esModule = true;
-exports.Queue = void 0;
+exports.Email = void 0;
 var axios_1 = __importStar(require("axios"));
-var Queue = (function () {
-    function Queue(BASE_URL) {
+var compile = require('es6-template-strings');
+var queue_1 = require("../queue");
+var Email = (function () {
+    function Email(BASE_URL) {
         this.baseUrl = "";
         this.baseUrl = BASE_URL;
     }
-    Queue.prototype.add = function (queue) {
+    Email.prototype.send = function (emailBody) {
         return __awaiter(this, void 0, void 0, function () {
-            var e_1;
+            var isRowString, template, glue, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, axios_1["default"].post("".concat(this.baseUrl, "/backend/engine/queue/push"), {
-                                value: queue.value,
-                                data: queue.data
-                            })];
+                        _a.trys.push([0, 3, , 4]);
+                        isRowString = false;
+                        if (typeof emailBody.mailOptions.html !== 'object') {
+                            isRowString = true;
+                        }
+                        return [4, this.generate(emailBody.mailOptions.html, emailBody.mailOptions.data, isRowString)];
                     case 1:
+                        template = _a.sent();
+                        delete emailBody.mailOptions.data;
+                        emailBody.mailOptions.html = template;
+                        glue = new queue_1.Queue(this.baseUrl);
+                        return [4, glue.add({
+                                value: "email",
+                                data: __assign({}, emailBody)
+                            })];
+                    case 2:
                         _a.sent();
                         return [2, { status: true, message: "ok" }];
-                    case 2:
+                    case 3:
                         e_1 = _a.sent();
                         if ((0, axios_1.isAxiosError)(e_1)) {
                             return [2, { status: false, message: e_1.message }];
                         }
                         return [2, { status: false, message: "Something went wrong" }];
-                    case 3: return [2];
+                    case 4: return [2];
                 }
             });
         });
     };
-    Queue.prototype.addBulk = function (queueBulk) {
-        var _a, queueBulk_1, queueBulk_1_1;
-        var _b, e_2, _c, _d;
+    Email.prototype.generate = function (html, data, isRowString) {
         return __awaiter(this, void 0, void 0, function () {
-            var queue, e_2_1, e_3;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var compiledHTML, url, res, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _e.trys.push([0, 16, , 17]);
-                        _e.label = 1;
+                        compiledHTML = '';
+                        if (!isRowString) return [3, 1];
+                        compiledHTML = compile(html, data);
+                        return [3, 4];
                     case 1:
-                        _e.trys.push([1, 9, 10, 15]);
-                        _a = true, queueBulk_1 = __asyncValues(queueBulk);
-                        _e.label = 2;
-                    case 2: return [4, queueBulk_1.next()];
+                        _a.trys.push([1, 3, , 4]);
+                        url = html.path;
+                        return [4, axios_1["default"].get(url)];
+                    case 2:
+                        res = _a.sent();
+                        compiledHTML = compile(res.data, data);
+                        return [3, 4];
                     case 3:
-                        if (!(queueBulk_1_1 = _e.sent(), _b = queueBulk_1_1.done, !_b)) return [3, 8];
-                        _d = queueBulk_1_1.value;
-                        _a = false;
-                        _e.label = 4;
-                    case 4:
-                        _e.trys.push([4, , 6, 7]);
-                        queue = _d;
-                        return [4, this.add({
-                                value: queue.value,
-                                data: queue.data
-                            })];
-                    case 5:
-                        _e.sent();
-                        return [3, 7];
-                    case 6:
-                        _a = true;
-                        return [7];
-                    case 7: return [3, 2];
-                    case 8: return [3, 15];
-                    case 9:
-                        e_2_1 = _e.sent();
-                        e_2 = { error: e_2_1 };
-                        return [3, 15];
-                    case 10:
-                        _e.trys.push([10, , 13, 14]);
-                        if (!(!_a && !_b && (_c = queueBulk_1["return"]))) return [3, 12];
-                        return [4, _c.call(queueBulk_1)];
-                    case 11:
-                        _e.sent();
-                        _e.label = 12;
-                    case 12: return [3, 14];
-                    case 13:
-                        if (e_2) throw e_2.error;
-                        return [7];
-                    case 14: return [7];
-                    case 15: return [2, { status: true, message: "ok" }];
-                    case 16:
-                        e_3 = _e.sent();
-                        return [2, { status: false, message: e_3.message }];
-                    case 17: return [2];
+                        e_2 = _a.sent();
+                        console.log("Download HTML file error > ", e_2.message);
+                        compiledHTML = 'Error in HTML template!';
+                        return [3, 4];
+                    case 4: return [2, compiledHTML];
                 }
             });
         });
     };
-    return Queue;
+    return Email;
 }());
-exports.Queue = Queue;
+exports.Email = Email;
 //# sourceMappingURL=index.js.map

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "glue server sdk for gluestack apps",
   "main": "./dist/index.js",
-  "type": "module",
+  "types": "./dist/index.d.ts",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsc --watch"
   },
@@ -11,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.2.2",
+    "es6-template-strings": "^2.0.1",
     "form-data": "^4.0.0",
     "ts-loader": "^9.4.2"
   },

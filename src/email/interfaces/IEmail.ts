@@ -3,8 +3,6 @@ import { IAttachments } from "./IAttachment";
 import { IEmailResponse } from "./IEmailRespose";
 
 export interface IEmail {
-  baseUrl: string;
-
   send(
     emailBody: {
       mailOptions: {

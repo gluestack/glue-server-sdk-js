@@ -69,9 +69,8 @@ exports.__esModule = true;
 exports.Queue = void 0;
 var axios_1 = __importStar(require("axios"));
 var Queue = (function () {
-    function Queue(BASE_URL) {
-        this.baseUrl = "";
-        this.baseUrl = BASE_URL;
+    function Queue(glue) {
+        this.glue = glue;
     }
     Queue.prototype.add = function (queue) {
         return __awaiter(this, void 0, void 0, function () {
@@ -80,7 +79,7 @@ var Queue = (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, axios_1["default"].post("".concat(this.baseUrl, "/backend/engine/queue/push"), {
+                        return [4, axios_1["default"].post("".concat(this.glue.appBaseUrl, "/backend/engine/queue/push"), {
                                 value: queue.value,
                                 data: queue.data
                             })];

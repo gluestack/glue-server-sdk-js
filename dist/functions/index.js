@@ -39,49 +39,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.Storage = void 0;
+exports.Functions = void 0;
 var axios_1 = __importDefault(require("axios"));
-var FormData = require("form-data");
-var HttpMethod_1 = require("../functions/interfaces/HttpMethod");
-var Storage = (function () {
-    function Storage(glue) {
-        this.instanceName = "storage";
+var HttpMethod_1 = require("./interfaces/HttpMethod");
+var Functions = (function () {
+    function Functions(glue) {
         this.glue = glue;
     }
-    Storage.prototype.upload = function (file) {
+    Functions.prototype.invoke = function (serviceAppId, serviceMethod, body, headers, method) {
+        if (body === void 0) { body = {}; }
+        if (headers === void 0) { headers = {}; }
+        if (method === void 0) { method = HttpMethod_1.HttpMethod.POST; }
         return __awaiter(this, void 0, void 0, function () {
-            var formData, data;
+            var data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        formData = new FormData();
-                        formData.append("file", file);
-                        return [4, axios_1["default"].post("".concat(this.glue.appBaseUrl, "/backend/").concat(this.instanceName, "/upload/"), formData, {
-                                headers: {
-                                    "content-type": "multipart/form-data"
-                                }
-                            })];
+                    case 0: return [4, (0, axios_1["default"])({
+                            method: HttpMethod_1.HttpMethod.POST,
+                            url: "".concat(this.glue.appBaseUrl, "/backend/engine/server/invoke"),
+                            data: {
+                                action_name: serviceAppId,
+                                method_uri: serviceMethod,
+                                method_name: method,
+                                data: body
+                            },
+                            headers: headers
+                        })];
                     case 1:
                         data = (_a.sent()).data;
-                        return [2, data];
+                        return [2, data.data];
                 }
             });
         });
     };
-    Storage.prototype.getPresignedUrl = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var url;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, this.glue.functions.invoke(this.instanceName, "get/".concat(id), {}, {}, HttpMethod_1.HttpMethod.GET)];
-                    case 1:
-                        url = (_a.sent()).url;
-                        return [2, url];
-                }
-            });
-        });
-    };
-    return Storage;
+    return Functions;
 }());
-exports.Storage = Storage;
+exports.Functions = Functions;
 //# sourceMappingURL=index.js.map

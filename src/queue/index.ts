@@ -1,18 +1,19 @@
+import { Glue } from "..";
 import axios, { isAxiosError } from "axios";
 import { IAddQueue } from "./interfaces/IAddQueue";
 import { IQueue } from "./interfaces/IQueue";
 
 export class Queue implements IQueue {
-  baseUrl: string = "";
+  glue: Glue;
 
-  constructor(BASE_URL: string) {
-    this.baseUrl = BASE_URL;
+  constructor(glue: Glue) {
+    this.glue = glue;
   }
 
   async add(queue: IAddQueue) {
     try {
       await axios.post(
-        `${this.baseUrl}/backend/engine/queue/push`,
+        `${this.glue.appBaseUrl}/backend/engine/queue/push`,
         {
           value: queue.value,
           data: queue.data

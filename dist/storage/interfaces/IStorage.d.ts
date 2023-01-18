@@ -1,5 +1,7 @@
+import { Glue } from "../..";
 export interface IStorage {
-    storageBaseUrl: string;
+    glue: Glue;
+    instanceName: string;
     upload(file: any): Promise<any>;
-    getPresignedUrl(path: string): Promise<string>;
+    getPresignedUrl(id: number): Promise<string>;
 }

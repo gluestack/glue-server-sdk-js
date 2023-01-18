@@ -5,13 +5,16 @@ var auth_1 = require("./auth");
 var email_1 = require("./email");
 var queue_1 = require("./queue");
 var storage_1 = require("./storage");
+var functions_1 = require("./functions");
 var Glue = (function () {
-    function Glue(_a) {
-        var BASE_URL = _a.BASE_URL;
-        this.auth = new auth_1.Auth(BASE_URL);
-        this.email = new email_1.Email(BASE_URL);
-        this.queue = new queue_1.Queue(BASE_URL);
-        this.storage = new storage_1.Storage();
+    function Glue(appBaseUrl) {
+        if (appBaseUrl === void 0) { appBaseUrl = "http://localhost:9090"; }
+        this.appBaseUrl = appBaseUrl;
+        this.auth = new auth_1.Auth(this);
+        this.email = new email_1.Email(this);
+        this.queue = new queue_1.Queue(this);
+        this.functions = new functions_1.Functions(this);
+        this.storage = new storage_1.Storage(this);
     }
     return Glue;
 }());

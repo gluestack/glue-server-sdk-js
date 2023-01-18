@@ -70,14 +70,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.Email = void 0;
+exports.Glue = exports.Email = void 0;
+var __1 = require("..");
+exports.Glue = __1.Glue;
 var axios_1 = __importStar(require("axios"));
 var compile = require('es6-template-strings');
 var queue_1 = require("../queue");
 var Email = (function () {
-    function Email(BASE_URL) {
-        this.baseUrl = "";
-        this.baseUrl = BASE_URL;
+    function Email(glue) {
+        this.glue = glue;
     }
     Email.prototype.send = function (emailBody) {
         return __awaiter(this, void 0, void 0, function () {
@@ -95,7 +96,7 @@ var Email = (function () {
                         template = _a.sent();
                         delete emailBody.mailOptions.data;
                         emailBody.mailOptions.html = template;
-                        glue = new queue_1.Queue(this.baseUrl);
+                        glue = new queue_1.Queue(this.glue);
                         return [4, glue.add({
                                 value: "email",
                                 data: __assign({}, emailBody)

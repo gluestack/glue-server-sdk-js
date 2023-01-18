@@ -1,8 +1,9 @@
+import { Glue } from "..";
 import { IAddQueue } from "./interfaces/IAddQueue";
 import { IQueue } from "./interfaces/IQueue";
 export declare class Queue implements IQueue {
-    baseUrl: string;
-    constructor(BASE_URL: string);
+    glue: Glue;
+    constructor(glue: Glue);
     add(queue: IAddQueue): Promise<{
         status: boolean;
         message: string;

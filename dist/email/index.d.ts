@@ -1,11 +1,12 @@
 /// <reference types="node" />
 /// <reference types="node" />
+import { Glue } from "..";
 import { Stream } from "stream";
 import { IAttachments } from "./interfaces/IAttachment";
 import { IEmail } from "./interfaces/IEmail";
 export declare class Email implements IEmail {
-    baseUrl: string;
-    constructor(BASE_URL: string);
+    glue: Glue;
+    constructor(glue: Glue);
     send(emailBody: {
         mailOptions: {
             from: string;
@@ -29,3 +30,4 @@ export declare class Email implements IEmail {
     }>;
     private generate;
 }
+export { Glue };

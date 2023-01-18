@@ -1,6 +1,8 @@
-export interface IStorage {
-  storageBaseUrl: string;
+import { Glue } from "../..";
 
+export interface IStorage {
+  glue: Glue;
+  instanceName: string;
   upload(file: any): Promise<any>;
-  getPresignedUrl(path: string): Promise<string>;
+  getPresignedUrl(id: number): Promise<string>;
 }

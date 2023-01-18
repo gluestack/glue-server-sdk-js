@@ -1,3 +1,4 @@
+import { Glue } from "..";
 import axios, { isAxiosError } from "axios";
 import { Stream } from "stream";
 import { IAttachments } from "./interfaces/IAttachment";
@@ -6,10 +7,10 @@ var compile = require('es6-template-strings');
 import { Queue } from "../queue";
 
 export class Email implements IEmail {
-  baseUrl: string = "";
+  glue: Glue;
 
-  constructor(BASE_URL: string) {
-    this.baseUrl = BASE_URL;
+  constructor(glue: Glue) {
+    this.glue = glue;
   }
 
   async send(
@@ -47,7 +48,7 @@ export class Email implements IEmail {
       delete emailBody.mailOptions.data;
       emailBody.mailOptions.html = template;
 
-      const glue = new Queue(this.baseUrl);
+      const glue = new Queue(this.glue);
 
       await glue.add({
         value: "email",
@@ -90,3 +91,5 @@ export class Email implements IEmail {
   }
 
 }
+export { Glue };
+

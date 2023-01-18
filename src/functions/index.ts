@@ -30,6 +30,6 @@ export class Functions implements IFunctions {
       },
       headers: headers
     });
-    return data;
+    return data.data;
   }
 }

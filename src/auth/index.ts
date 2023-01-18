@@ -1,6 +1,7 @@
 import { Glue } from "..";
 import { IAuth } from "./interfaces/IAuth";
 import { HttpMethod } from "../functions/interfaces/HttpMethod";
+import { IUser } from "./interfaces/IUser";
 
 export class Auth implements IAuth {
   authToken: string = "";
@@ -25,7 +26,7 @@ export class Auth implements IAuth {
   async getUser() {
     if (this.authToken) {
       try {
-        const data: any = await this.glue.functions.invoke(
+        const user: IUser = await this.glue.functions.invoke(
           "auth",
           "authentication/me",
           {},
@@ -34,8 +35,7 @@ export class Auth implements IAuth {
           },
           HttpMethod.GET,
         );
-        this.setAuthToken(data.token);
-        return data.token;
+        return user;
       } catch (e) {
         //
       }

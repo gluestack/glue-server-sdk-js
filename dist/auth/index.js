@@ -52,7 +52,7 @@ var Auth = (function () {
     };
     Auth.prototype.getUser = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var data, e_1;
+            var user, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -64,9 +64,8 @@ var Auth = (function () {
                                 "x-hasura-user-token": this.authToken
                             }, HttpMethod_1.HttpMethod.GET)];
                     case 2:
-                        data = _a.sent();
-                        this.setAuthToken(data.token);
-                        return [2, data.token];
+                        user = _a.sent();
+                        return [2, user];
                     case 3:
                         e_1 = _a.sent();
                         return [3, 4];

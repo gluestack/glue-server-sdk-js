@@ -67,7 +67,7 @@ var Functions = (function () {
                         })];
                     case 1:
                         data = (_a.sent()).data;
-                        return [2, data];
+                        return [2, data.data];
                 }
             });
         });

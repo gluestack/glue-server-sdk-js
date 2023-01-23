@@ -48,13 +48,15 @@ var Storage = (function () {
         this.instanceName = "storage";
         this.glue = glue;
     }
-    Storage.prototype.upload = function (file) {
+    Storage.prototype.upload = function (file, is_public) {
+        if (is_public === void 0) { is_public = false; }
         return __awaiter(this, void 0, void 0, function () {
             var formData, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         formData = new FormData();
+                        formData.append("is_public", is_public.toString());
                         formData.append("file", file);
                         return [4, axios_1["default"].post("".concat(this.glue.appBaseUrl, "/backend/").concat(this.instanceName, "/upload/"), formData, {
                                 headers: {
@@ -80,6 +82,9 @@ var Storage = (function () {
                 }
             });
         });
+    };
+    Storage.prototype.getPublicUrl = function (path) {
+        return "".concat(this.glue.appBaseUrl, "/backend/").concat(this.instanceName, "/file/public/").concat(path);
     };
     return Storage;
 }());

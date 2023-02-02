@@ -1,5 +1,5 @@
 import { Glue } from "..";
-import { IAuth } from "./interfaces/IAuth";
+import { IAuth, ILoginArgs } from "./interfaces/IAuth";
 import { IUser } from "./interfaces/IUser";
 export declare class Auth implements IAuth {
     authToken: string;
@@ -9,4 +9,5 @@ export declare class Auth implements IAuth {
     getAuthToken(): string;
     getUser(): Promise<IUser>;
     isLoggedIn(): Promise<boolean>;
+    login(args: ILoginArgs): Promise<any>;
 }

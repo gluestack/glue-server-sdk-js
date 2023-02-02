@@ -1,7 +1,8 @@
 import { Glue } from "..";
-import { IAuth } from "./interfaces/IAuth";
+import { IAuth, ILoginArgs } from "./interfaces/IAuth";
 import { HttpMethod } from "../functions/interfaces/HttpMethod";
 import { IUser } from "./interfaces/IUser";
+import axios from "axios";
 
 export class Auth implements IAuth {
   authToken: string = "";
@@ -33,7 +34,7 @@ export class Auth implements IAuth {
           {
             "x-hasura-user-token": this.authToken,
           },
-          HttpMethod.GET,
+          HttpMethod.GET
         );
         return user;
       } catch (e) {
@@ -49,5 +50,28 @@ export class Auth implements IAuth {
       return true;
     }
     return false;
+  }
+
+  //@login
+  async login(args: ILoginArgs) {
+    try {
+      const { data } = await axios.post(
+        `${this.glue.appBaseUrl}/backend/auth/authentication/signin`,
+        args
+      );
+      if (data?.success && data?.data) {
+        // SET THE TOKEN
+        this.setAuthToken(data.data.token);
+        return data?.data;
+      }
+
+      return data?.message;
+    } catch (error) {
+      let message = "Something went wrong";
+      if (axios.isAxiosError(error)) {
+        message = error.message;
+      }
+      return message;
+    }
   }
 }

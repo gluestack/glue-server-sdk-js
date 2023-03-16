@@ -30,15 +30,19 @@ export class Storage implements IStorage {
   }
 
   //@getPresignedUrl
-  async getPresignedUrl(id: number): Promise<string> {
-    const { url }: any = await this.glue.functions.invoke(
-      this.instanceName,
-      `get/${id}`,
-      {},
-      {},
-      HttpMethod.GET,
-    );
-    return url;
+  async getPresignedUrl(id: number, headers: any = {}): Promise<string> {
+    try {
+      const { url }: any = await this.glue.functions.invoke(
+        this.instanceName,
+        `get/${id}`,
+        {},
+        headers,
+        HttpMethod.GET,
+      );
+      return url;
+    } catch (e: any) {
+      throw new Error(e?.response?.data?.errors || "Something went wrong");
+    }
   }
 
   //@getPublicUrl

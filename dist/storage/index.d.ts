@@ -5,6 +5,6 @@ export declare class Storage implements IStorage {
     instanceName: string;
     constructor(glue: Glue);
     upload(file: any, is_public?: boolean): Promise<any>;
-    getPresignedUrl(id: number): Promise<string>;
+    getPresignedUrl(id: number, headers?: any): Promise<string>;
     getPublicUrl(path: string): string;
 }

@@ -70,15 +70,23 @@ var Storage = (function () {
             });
         });
     };
-    Storage.prototype.getPresignedUrl = function (id) {
+    Storage.prototype.getPresignedUrl = function (id, headers) {
+        var _a, _b;
+        if (headers === void 0) { headers = {}; }
         return __awaiter(this, void 0, void 0, function () {
-            var url;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, this.glue.functions.invoke(this.instanceName, "get/".concat(id), {}, {}, HttpMethod_1.HttpMethod.GET)];
+            var url, e_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _c.trys.push([0, 2, , 3]);
+                        return [4, this.glue.functions.invoke(this.instanceName, "get/".concat(id), {}, headers, HttpMethod_1.HttpMethod.GET)];
                     case 1:
-                        url = (_a.sent()).url;
+                        url = (_c.sent()).url;
                         return [2, url];
+                    case 2:
+                        e_1 = _c.sent();
+                        throw new Error(((_b = (_a = e_1 === null || e_1 === void 0 ? void 0 : e_1.response) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.errors) || "Something went wrong");
+                    case 3: return [2];
                 }
             });
         });
